@@ -20,6 +20,7 @@ namespace Infrastructure.Data
         private IGenericRepository<Category> _Category;
         private IGenericRepository<FoodType> _FoodType;
         private IGenericRepository<MenuItem> _MenuItem;
+        public IGenericRepository<ApplicationUser> _ApplicationUser;
 
         public IGenericRepository<Category> Category
         {
@@ -55,6 +56,20 @@ namespace Infrastructure.Data
                 return _MenuItem;
             }
         }
+
+
+        public IGenericRepository<ApplicationUser> ApplicationUser
+        {
+            get
+            {
+                if (_ApplicationUser == null)
+                {
+                    _ApplicationUser = new GenericRepository<ApplicationUser>(_dbContext);
+                }
+                return _ApplicationUser;
+            }
+        }
+
 
         public int Commit()
         {

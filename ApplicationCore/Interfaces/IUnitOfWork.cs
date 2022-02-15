@@ -12,6 +12,7 @@ namespace ApplicationCore.Interfaces
         public IGenericRepository<Category> Category { get; }
         public IGenericRepository<FoodType> FoodType { get; }
         public IGenericRepository<MenuItem> MenuItem { get; }
+        public IGenericRepository<ApplicationUser> ApplicationUser { get; }
         //Save changes to database source
         int Commit();
         Task<int> CommitAsync();
