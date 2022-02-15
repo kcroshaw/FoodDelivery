@@ -22,6 +22,7 @@
     <None Remove="Utilty\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\Migrations\" />
     <Folder Include="Utility\" />
   </ItemGroup>
 </Project>

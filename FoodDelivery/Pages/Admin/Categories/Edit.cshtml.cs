@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Models;
-using FoodDelivery.Data;
+using Infrastructure.Data;
 
 namespace FoodDelivery.Pages.Admin.Categories
 {
