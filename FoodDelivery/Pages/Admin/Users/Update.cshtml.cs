@@ -38,5 +38,43 @@ namespace FoodDelivery.Pages.Admin.Users
             OldRoles = roles.ToList();
             AllRoles = _roleManager.Roles.Select(r => r.Name).ToList();
         }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var newRoles = Request.Form["roles"];
+            UsersRoles = newRoles.ToList();
+            var OldRoles = await _userManager.GetRolesAsync(AppUser); //ones in DB
+            var rolesToAdd = new List<string>();
+            var user = _unitOfWork.ApplicationUser.Get(u => u.Id == AppUser.Id);
+
+            user.FirstName = AppUser.FirstName;
+            user.LastName = AppUser.LastName;
+            user.Email = AppUser.Email;
+            user.PhoneNumber = AppUser.PhoneNumber;
+            _unitOfWork.ApplicationUser.Update(user);
+            _unitOfWork.Commit();
+
+            //udpate their roles
+
+            foreach (var r in UsersRoles)
+            {
+                if(!OldRoles.Contains(r))
+                {
+                    rolesToAdd.Add(r);
+                }
+            }
+
+            foreach (var r in OldRoles)
+            {
+                if(!UsersRoles.Contains(r)) //remove
+                {
+                    var result = await _userManager.RemoveFromRoleAsync(user, r);
+                }
+            }
+
+            var result1 = await _userManager.AddToRolesAsync(user, rolesToAdd.AsEnumerable());
+            return RedirectToPage("./Index", new {success = true, message = "Update Successful"});
+        }
+
     }
 }
