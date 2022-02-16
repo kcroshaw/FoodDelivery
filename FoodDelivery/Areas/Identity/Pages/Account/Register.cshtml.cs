@@ -124,7 +124,7 @@ namespace FoodDelivery.Areas.Identity.Pages.Account
         {
             //retrieve the role from the form
             string role = Request.Form["rdUserRole"].ToString();
-            if (role == "") { role = SD.ManagerRole; } //make the first login a manager)
+            if (role == "") { role = SD.CustomerRole; } //make the first login a manager)
             returnUrl ??= Url.Content("~/"); //null-coalescing assignment operator ??= assigns the value of right-hand operand to its left-hand operand only if the left-hand is nulll
             if (ModelState.IsValid)
             {
@@ -139,13 +139,13 @@ namespace FoodDelivery.Areas.Identity.Pages.Account
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 //add the roles to the ASPNET Roles table if they do not exist yet
-                if (!await _roleManager.RoleExistsAsync(SD.ManagerRole))
-                {
-                    _roleManager.CreateAsync(new IdentityRole(SD.ManagerRole)).GetAwaiter().GetResult();
-                    _roleManager.CreateAsync(new IdentityRole(SD.DriverRole)).GetAwaiter().GetResult();
-                    _roleManager.CreateAsync(new IdentityRole(SD.KitchenRole)).GetAwaiter().GetResult();
-                    _roleManager.CreateAsync(new IdentityRole(SD.CustomerRole)).GetAwaiter().GetResult();
-                }
+                //if (!await _roleManager.RoleExistsAsync(SD.ManagerRole))
+                //{
+                //    _roleManager.CreateAsync(new IdentityRole(SD.ManagerRole)).GetAwaiter().GetResult();
+                //    _roleManager.CreateAsync(new IdentityRole(SD.DriverRole)).GetAwaiter().GetResult();
+                //    _roleManager.CreateAsync(new IdentityRole(SD.KitchenRole)).GetAwaiter().GetResult();
+                //    _roleManager.CreateAsync(new IdentityRole(SD.CustomerRole)).GetAwaiter().GetResult();
+                //}
                 if (result.Succeeded)
                 //assign role to the user (from the form radio options available after the first manager is created)
                 {

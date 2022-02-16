@@ -27,4 +27,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Pages\Admin\Users\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\Admin\Users\" />
+  </ItemGroup>
 </Project>
