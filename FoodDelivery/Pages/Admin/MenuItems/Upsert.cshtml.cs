@@ -35,7 +35,7 @@ namespace FoodDelivery.Pages.Admin.MenuItems
                 FoodTypeList = foodTypes.Select(f => new SelectListItem { Text = f.Name, Value = f.Id.ToString() });
             }
 
-            if (id == null)
+            if (MenuItem == null)
             {
                 MenuItem = new();
             }

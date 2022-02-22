@@ -32,5 +32,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\Admin\Users\" />
+    <Folder Include="Pages\Customer\Cart\" />
   </ItemGroup>
 </Project>

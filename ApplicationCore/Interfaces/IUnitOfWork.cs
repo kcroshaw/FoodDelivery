@@ -13,6 +13,7 @@ namespace ApplicationCore.Interfaces
         public IGenericRepository<FoodType> FoodType { get; }
         public IGenericRepository<MenuItem> MenuItem { get; }
         public IGenericRepository<ApplicationUser> ApplicationUser { get; }
+        public IGenericRepository<ShoppingCart> ShoppingCart { get; }
         //Save changes to database source
         //This is a test comment
         int Commit();
