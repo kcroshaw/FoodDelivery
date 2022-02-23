@@ -35,29 +35,29 @@ namespace Infrastructure.Data
             _dbContext.SaveChanges();
         }
 
-        public virtual async Task GetAsync(Expression predicate, bool asNoTracking = false, string includes = null)
+        public T Get(Expression<Func<T, bool>> predicate, bool asNoTracking = false, string includes = null)
         {
             if (includes == null) //there are no tables to join. Single object
             {
                 if (asNoTracking) //read only copy for display purposes
                 {
 
-                    return await _dbContext.Set()
+                    return _dbContext.Set<T>()
                     .AsNoTracking()
                     .Where(predicate)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
 
                 }
                 else //it needs to be tracked
                 {
-                    return await _dbContext.Set()
+                    return _dbContext.Set<T>()
                     .Where(predicate)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
                 }
             }
             else //this has includes (other objects or tables)
             {
-                IQueryable queryable = _dbContext.Set();
+                IQueryable<T> queryable = _dbContext.Set<T>();
                 foreach (var inludeProperty in includes.Split(new char[]
                 {','}, StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -65,23 +65,23 @@ namespace Infrastructure.Data
                 }
                 if (asNoTracking) //read only copy for display purposes
                 {
-                    return await queryable
+                    return queryable
                     .AsNoTracking()
                     .Where(predicate)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
                 }
                 else //it needs to be tracked
                 {
-                    return await queryable
+                    return queryable
                     .Where(predicate)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
                 }
             }
         }
 
         public virtual async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = false, string includes = null)
         {
-            {
+            
                 if (includes == null) //there are no tables to join. Single object
                 {
                     if (asNoTracking) //read only copy for display purposes
@@ -122,7 +122,7 @@ namespace Infrastructure.Data
                         .FirstOrDefaultAsync();
                     }
                 }
-            }
+           
         }
 
 
