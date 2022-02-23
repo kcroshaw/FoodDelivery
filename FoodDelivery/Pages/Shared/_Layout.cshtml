@@ -1,9 +1,4 @@
-﻿@using Infrastructure.Utilty
-@using Microsoft.AspNetCore.Http
-@inject IHttpContextAccessor HttpContextAccessor
-@using Infrastructure.Services
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,63 +21,31 @@
                 </button>
                 <div class="navbar-collapse text-white collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.IsInRole(SD.ManagerRole))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-area="" asp-page="/Admin/Categories/Index">Categories</a>
                                     <a class="dropdown-item" asp-area="" asp-page="/Admin/FoodTypes/Index">Food Types</a>
                                     <a class="dropdown-item" asp-area="" asp-page="/Admin/MenuItems/Index">Menu Items</a>
                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Admin/Users/Index">Users</a>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Admin/Roles/Index">Users</a>
                                     <a class="dropdown-item" asp-area="" asp-page="/Admin/Users/Index">Users</a>
                                     <a class="dropdown-item" asp-area="" asp-page="/Admin/Roles/Index">Roles</a>
                                 </div>
-                            </li>
-                        }
-                        @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.KitchenRole))
-                        {
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-page="/Admin/Order/ManageOrder">Manage Orders</a>
-                                </li>
-                            }
-                            @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.DriverRole))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-page="/Admin/Order/OrderList">Order Deliveries</a>
-                                </li>
-                            }
-                            @if (User.IsInRole(SD.CustomerRole))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-page="/Admin/Order/OrderList">Order History</a>
-                                </li>
-                                <li>
-                                    @if (HttpContextAccessor.HttpContext.Session.GetInt32(SD.ShoppingCart) != null)
-                                    {
-                                    <li>
-                                        <a class="nav-nav-link text-white" asp-page="/Customer/Cart/Index">
-                                            @{
-                                                var count = HttpContextAccessor.HttpContext.Session.GetInt32(SD.ShoppingCart);
-                                            }
-                                            <i class="fas fa-shopping-cart"></i>&nbsp; (@count)
-                                        </a>
-                                    </li>
-                                    }
-                                    else
-                                    {
-                                        <li>
-                                            <a class="nav-link text-white" asp-page="/Customer/Cart/Index">
-                                                @await Component.InvokeAsync("ShoppingCart")
-                                                <i class="fas fa-shopping-cart"></i>&nbsp;(0)
-                                            </a>
-                                        </li>
-                                    }
-                                 </li>
-                                }}
-
-                        <li>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-page="/Admin/Order/ManageOrder">Manage Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-page="/Admin/Order/OrderList">Order Deliveries</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-page="/Customer/Cart/Index">
+                                @*<i class="fas fa-shopping-cart"></i> (0)*@
+                                @await Component.InvokeAsync("ShoppingCart")
+                                </a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -94,13 +57,11 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2022 - FoodDelivery - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
