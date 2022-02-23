@@ -27,6 +27,10 @@ namespace FoodDelivery.Pages.Customer.Home
 
         public IActionResult OnPost()
         {
+            if(ShoppingCartObj.ApplicationUserId == null)
+            {
+                return Redirect("~/Identity/Account/Login");
+            }
 
             //get the applicationuserid from AspNetUsers table
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
