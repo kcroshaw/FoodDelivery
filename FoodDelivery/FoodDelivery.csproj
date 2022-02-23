@@ -29,9 +29,13 @@
 
   <ItemGroup>
     <None Remove="Pages\Admin\Users\" />
+    <None Remove="Pages\Shared\Components\" />
+    <None Remove="Pages\Shared\Components\Shopping Cart\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\Admin\Users\" />
     <Folder Include="Pages\Customer\Cart\" />
+    <Folder Include="Pages\Shared\Components\" />
+    <Folder Include="Pages\Shared\Components\ShoppingCart\" />
   </ItemGroup>
 </Project>

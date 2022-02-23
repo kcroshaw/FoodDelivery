@@ -1,11 +1,11 @@
-﻿using ApplicationCore.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using ApplicationCore.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
@@ -17,6 +17,7 @@ namespace Infrastructure.Data
         {
             _dbContext = dbContext;
         }
+
         public void Add(T entity)
         {
             _dbContext.Set<T>().Add(entity);
@@ -35,96 +36,91 @@ namespace Infrastructure.Data
             _dbContext.SaveChanges();
         }
 
-        public T Get(Expression<Func<T, bool>> predicate, bool asNoTracking = false, string includes = null)
+        public virtual T Get(Expression<Func<T, bool>> predicate, bool asNoTracking = false, string includes = null)
         {
             if (includes == null) //there are no tables to join. Single object
             {
-                if (asNoTracking) //read only copy for display purposes
+                if (asNoTracking)   //read only copy for display purposes
                 {
-
                     return _dbContext.Set<T>()
                     .AsNoTracking()
                     .Where(predicate)
                     .FirstOrDefault();
-
                 }
-                else //it needs to be tracked
+                else    //it needs to be tracked
                 {
                     return _dbContext.Set<T>()
-                    .Where(predicate)
-                    .FirstOrDefault();
+                        .Where(predicate)
+                        .FirstOrDefault();
                 }
             }
             else //this has includes (other objects or tables)
             {
                 IQueryable<T> queryable = _dbContext.Set<T>();
                 foreach (var inludeProperty in includes.Split(new char[]
-                {','}, StringSplitOptions.RemoveEmptyEntries))
+                    {','}, StringSplitOptions.RemoveEmptyEntries))
                 {
                     queryable = queryable.Include(inludeProperty);
                 }
-                if (asNoTracking) //read only copy for display purposes
+                if (asNoTracking)   //read only copy for display purposes
                 {
                     return queryable
                     .AsNoTracking()
                     .Where(predicate)
                     .FirstOrDefault();
                 }
-                else //it needs to be tracked
+                else    //it needs to be tracked
                 {
                     return queryable
-                    .Where(predicate)
-                    .FirstOrDefault();
+                        .Where(predicate)
+                        .FirstOrDefault();
                 }
             }
         }
 
         public virtual async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = false, string includes = null)
         {
-            
-                if (includes == null) //there are no tables to join. Single object
+            if (includes == null) //there are no tables to join. Single object
+            {
+                if (asNoTracking)   //read only copy for display purposes
                 {
-                    if (asNoTracking) //read only copy for display purposes
-                    {
 
-                        return await _dbContext.Set<T>()
-                        .AsNoTracking()
-                        .Where(predicate)
-                        .FirstOrDefaultAsync();
+                    return await _dbContext.Set<T>()
+                    .AsNoTracking()
+                    .Where(predicate)
+                    .FirstOrDefaultAsync();
 
-                    }
-                    else //it needs to be tracked
-                    {
-                        return await _dbContext.Set<T>()
-                        .Where(predicate)
-                        .FirstOrDefaultAsync();
-                    }
                 }
-                else //this has includes (other objects or tables)
+                else    //it needs to be tracked
                 {
-                    IQueryable<T> queryable = _dbContext.Set<T>();
-                    foreach (var inludeProperty in includes.Split(new char[]
+                    return await _dbContext.Set<T>()
+                        .Where(predicate)
+                        .FirstOrDefaultAsync();
+                }
+            }
+            else //this has includes (other objects or tables)
+            {
+                IQueryable<T> queryable = _dbContext.Set<T>();
+                foreach (var inludeProperty in includes.Split(new char[]
                     {','}, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        queryable = queryable.Include(inludeProperty);
-                    }
-                    if (asNoTracking) //read only copy for display purposes
-                    {
-                        return await queryable
-                        .AsNoTracking()
-                        .Where(predicate)
-                        .FirstOrDefaultAsync();
-                    }
-                    else //it needs to be tracked
-                    {
-                        return await queryable
-                        .Where(predicate)
-                        .FirstOrDefaultAsync();
-                    }
+                {
+                    queryable = queryable.Include(inludeProperty);
                 }
-           
+                if (asNoTracking)   //read only copy for display purposes
+                {
+                    return await queryable
+                    .AsNoTracking()
+                    .Where(predicate)
+                    .FirstOrDefaultAsync();
+                }
+                else    //it needs to be tracked
+                {
+                    return await queryable
+                        .Where(predicate)
+                        .FirstOrDefaultAsync();
+                }
+            }
         }
-
 
         public virtual T GetById(int id)
         {
@@ -139,15 +135,15 @@ namespace Infrastructure.Data
         public virtual IEnumerable<T> List(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
         {
             IQueryable<T> queryable = _dbContext.Set<T>();
-            if(predicate != null && includes == null)
+            if (predicate != null && includes == null) //does have a where but does not include others
             {
                 return _dbContext.Set<T>()
                     .Where(predicate)
                     .AsEnumerable();
             }
-            else if(includes != null)
+            else if (includes != null) //are included joins
             {
-                foreach(var includeProperty in includes.Split(new char[]
+                foreach (var includeProperty in includes.Split(new char[]
                     {','}, StringSplitOptions.RemoveEmptyEntries))
                 {
                     queryable = queryable.Include(includeProperty);
@@ -166,7 +162,7 @@ namespace Infrastructure.Data
             }
             else
             {
-                if(orderBy == null)
+                if (orderBy == null)
                 {
                     return queryable.Where(predicate).ToList().AsEnumerable();
                 }
@@ -180,13 +176,13 @@ namespace Infrastructure.Data
         public virtual async Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
         {
             IQueryable<T> queryable = _dbContext.Set<T>();
-            if (predicate != null && includes == null)
+            if (predicate != null && includes == null) //does have a where but does not include others
             {
                 return await _dbContext.Set<T>()
                     .Where(predicate)
                     .ToListAsync();
             }
-            else if (includes != null)
+            else if (includes != null) //are included joins
             {
                 foreach (var includeProperty in includes.Split(new char[]
                     {','}, StringSplitOptions.RemoveEmptyEntries))
@@ -198,7 +194,7 @@ namespace Infrastructure.Data
             {
                 if (orderBy == null)
                 {
-                    return await queryable.ToListAsync(); 
+                    return await queryable.ToListAsync();
                 }
                 else
                 {
@@ -213,7 +209,7 @@ namespace Infrastructure.Data
                 }
                 else
                 {
-                    return await queryable.Where(predicate).OrderBy(orderBy).ToListAsync(); 
+                    return await queryable.Where(predicate).OrderBy(orderBy).ToListAsync();
                 }
             }
         }
