@@ -19,7 +19,7 @@ namespace FoodDelivery.Pages.Customer.Home
         {
             ShoppingCartObj = new ShoppingCart()
             {
-                MenuItem = await _unitOfWork.MenuItem.GetAsync(m => m.Id == id, false, "C")
+                MenuItem = await _unitOfWork.MenuItem.GetAsync(m => m.Id == id, false, "Category,FoodType")
             };
             ShoppingCartObj.MenuItemId = id;
         }

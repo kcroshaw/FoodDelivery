@@ -52,7 +52,7 @@ namespace FoodDelivery.Pages.Admin.MenuItems
                 if (files.Count > 0)
                 {
                     string fileName = Guid.NewGuid().ToString();
-                    var uploads = Path.Combine(webRootPath, @"iimages\menuitems\");
+                    var uploads = Path.Combine(webRootPath, @"images\menuitems\");
                     var extension = Path.GetExtension(files[0].FileName);
 
                     var fullPath = uploads + fileName + extension;

@@ -35,86 +35,92 @@ namespace Infrastructure.Data
             _dbContext.SaveChanges();
         }
 
-        public virtual T Get(Expression<Func<T, bool>> predicate, bool asNoTracking = false, string includes = null)
+        public virtual async Task GetAsync(Expression predicate, bool asNoTracking = false, string includes = null)
         {
-            if(includes == null) //There are no tables join. Single object
+            if (includes == null) //there are no tables to join. Single object
             {
-                if(asNoTracking) //Read Only copy for display purposes
+                if (asNoTracking) //read only copy for display purposes
                 {
-                    return _dbContext.Set<T>()
-                        .AsNoTracking()
-                        .Where(predicate)
-                        .FirstOrDefault();
+
+                    return await _dbContext.Set()
+                    .AsNoTracking()
+                    .Where(predicate)
+                    .FirstOrDefaultAsync();
+
                 }
-                else //It needs to be tracked
+                else //it needs to be tracked
                 {
-                    return _dbContext.Set<T>()
-                        .Where(predicate)
-                        .FirstOrDefault();
+                    return await _dbContext.Set()
+                    .Where(predicate)
+                    .FirstOrDefaultAsync();
                 }
             }
-            else //This has includes (other objects or tables)
+            else //this has includes (other objects or tables)
             {
-                IQueryable<T> queryable = _dbContext.Set<T>();
-                foreach(var includeProperty in includes.Split(new char[]
-                    {','}, StringSplitOptions.RemoveEmptyEntries))
+                IQueryable queryable = _dbContext.Set();
+                foreach (var inludeProperty in includes.Split(new char[]
+                {','}, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    queryable = queryable.Include(includeProperty);
+                    queryable = queryable.Include(inludeProperty);
                 }
-                if (asNoTracking) //Read Only copy for display purposes
+                if (asNoTracking) //read only copy for display purposes
                 {
-                    return _dbContext.Set<T>()
-                        .AsNoTracking()
-                        .Where(predicate)
-                        .FirstOrDefault();
+                    return await queryable
+                    .AsNoTracking()
+                    .Where(predicate)
+                    .FirstOrDefaultAsync();
                 }
-                else //It needs to be tracked
+                else //it needs to be tracked
                 {
-                    return _dbContext.Set<T>()
-                        .Where(predicate)
-                        .FirstOrDefault();
+                    return await queryable
+                    .Where(predicate)
+                    .FirstOrDefaultAsync();
                 }
             }
         }
 
         public virtual async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = false, string includes = null)
         {
-            if (includes == null) //There are no tables join. Single object
             {
-                if (asNoTracking) //Read Only copy for display purposes
+                if (includes == null) //there are no tables to join. Single object
                 {
-                    return await _dbContext.Set<T>()
+                    if (asNoTracking) //read only copy for display purposes
+                    {
+
+                        return await _dbContext.Set<T>()
                         .AsNoTracking()
                         .Where(predicate)
                         .FirstOrDefaultAsync();
-                }
-                else //It needs to be tracked
-                {
-                    return await _dbContext.Set<T>()
+
+                    }
+                    else //it needs to be tracked
+                    {
+                        return await _dbContext.Set<T>()
                         .Where(predicate)
                         .FirstOrDefaultAsync();
+                    }
                 }
-            }
-            else //This has includes (other objects or tables)
-            {
-                IQueryable<T> queryable = _dbContext.Set<T>();
-                foreach (var includeProperty in includes.Split(new char[]
+                else //this has includes (other objects or tables)
+                {
+                    IQueryable<T> queryable = _dbContext.Set<T>();
+                    foreach (var inludeProperty in includes.Split(new char[]
                     {','}, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    queryable = queryable.Include(includeProperty);
-                }
-                if (asNoTracking) //Read Only copy for display purposes
-                {
-                    return await _dbContext.Set<T>()
+                    {
+                        queryable = queryable.Include(inludeProperty);
+                    }
+                    if (asNoTracking) //read only copy for display purposes
+                    {
+                        return await queryable
                         .AsNoTracking()
                         .Where(predicate)
                         .FirstOrDefaultAsync();
-                }
-                else //It needs to be tracked
-                {
-                    return await _dbContext.Set<T>()
+                    }
+                    else //it needs to be tracked
+                    {
+                        return await queryable
                         .Where(predicate)
                         .FirstOrDefaultAsync();
+                    }
                 }
             }
         }
