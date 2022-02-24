@@ -51,13 +51,13 @@ namespace FoodDelivery.Pages.Customer.Cart
             }
         }
 
-        public IActionResult OnPost(string stripeToken)
-        {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+        //public IActionResult OnPost(string stripeToken)
+        //{
+        //    var claimsIdentity = (ClaimsIdentity)User.Identity;
+        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            OrderDetailsCart.ListCart = _unitOfWork.ShoppingCart.List(c => c.ApplicationUserId == claim.Value).ToList();
-            OrderDetailsCart.OrderHeader.
-        }
+        //    OrderDetailsCart.ListCart = _unitOfWork.ShoppingCart.List(c => c.ApplicationUserId == claim.Value).ToList();
+        //    OrderDetailsCart.OrderHeader.
+        //}
     }
 }
