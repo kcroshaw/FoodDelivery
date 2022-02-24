@@ -12,7 +12,7 @@ namespace ApplicationCore.Models
 		public string UserId { get; set; }
 
 		[ForeignKey("UserId")]
-        public virtual ApplicationUser ApplcationUser { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
 		[Required]
 		public DateTime OrderDate { get; set; }
@@ -33,6 +33,8 @@ namespace ApplicationCore.Models
 
 		[Display(Name = "Delivery Name")]
 		public string DeliveryName { get; set; }
+
+		public string Comments { get; set; }
 
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
