@@ -39,6 +39,8 @@ namespace ApplicationCore.Models
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
+        public string PaymentStatus { get; set; }
+
         public string TransactionsId { get; set; }
 	}			
 }

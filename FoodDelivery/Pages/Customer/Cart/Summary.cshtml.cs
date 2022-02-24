@@ -50,5 +50,14 @@ namespace FoodDelivery.Pages.Customer.Cart
                 OrderDetailsCart.OrderHeader.DeliveryDate = DateTime.Now;
             }
         }
+
+        public IActionResult OnPost(string stripeToken)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            OrderDetailsCart.ListCart = _unitOfWork.ShoppingCart.List(c => c.ApplicationUserId == claim.Value).ToList();
+            OrderDetailsCart.OrderHeader.
+        }
     }
 }
