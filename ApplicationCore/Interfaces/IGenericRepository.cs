@@ -19,6 +19,15 @@ namespace ApplicationCore.Interfaces
         void Add(T entity);
         void Delete(T entity);
         void Delete(IEnumerable<T> entities);
+        IEnumerable<T> GetAll(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = null
+            );
+        T GetFirstOrDefault(
+            Expression<Func<T, bool>> filter = null,
+            string includeProperties = null
+            );
         void Update(T entity);
     }
 }
