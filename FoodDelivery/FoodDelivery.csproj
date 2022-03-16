@@ -39,6 +39,5 @@
     <Folder Include="Pages\Admin\Users\" />
     <Folder Include="Pages\Customer\Cart\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Pages\Admin\Orders\" />
   </ItemGroup>
 </Project>

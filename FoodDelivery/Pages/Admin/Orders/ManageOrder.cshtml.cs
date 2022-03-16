@@ -8,6 +8,7 @@ using FoodDelivery.ViewModels;
 using Infrastructure.Utilty;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Stripe;
 
 namespace FoodDelivery.Pages.Admin.Orders
 {
@@ -40,6 +41,50 @@ namespace FoodDelivery.Pages.Admin.Orders
 
                 orderDetailsVM.Add(individual);
             }
+        }
+
+        public IActionResult OnPostOrderPrepare(int orderId)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(o => o.Id == orderId);
+            orderHeader.Status = SD.StatusInProcess;
+            _unitOfWork.Commit();
+            return RedirectToPage("ManageOrder");
+        }
+
+        public IActionResult OnPostOrderReady(int orderId)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(o => o.Id == orderId);
+            orderHeader.Status = SD.StatusReady;
+            _unitOfWork.Commit();
+            return RedirectToPage("ManageOrder");
+        }
+
+        public IActionResult OnPostOrderCancel(int orderId)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(o => o.Id == orderId);
+            orderHeader.Status = SD.StatusCancelled;
+            _unitOfWork.Commit();
+            return RedirectToPage("ManageOrder");
+        }
+
+        public IActionResult OnPostOrderRefund(int orderId)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(o => o.Id == orderId);
+
+            //refund the amount with Stripe
+            var options = new RefundCreateOptions
+            {
+                Amount = Convert.ToInt32(orderHeader.OrderTotal * 100),
+                Reason = RefundReasons.RequestedByCustomer,
+                Charge = orderHeader.TransactionsId
+            };
+
+            var service = new RefundService();
+            Refund refund = service.Create(options);
+
+            orderHeader.Status = SD.StatusRefunded;
+            _unitOfWork.Commit();
+            return RedirectToPage("ManageOrder");
         }
     }
 }
