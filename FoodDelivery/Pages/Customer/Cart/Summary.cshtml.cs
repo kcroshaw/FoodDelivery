@@ -17,6 +17,7 @@ namespace FoodDelivery.Pages.Customer.Cart
     {
         private readonly IUnitOfWork _unitOfWork;
         public SummaryModel(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        private int i = 1;
 
         [BindProperty]
         public OrderDetailsCartVM OrderDetailsCart { get; set; }
@@ -49,6 +50,8 @@ namespace FoodDelivery.Pages.Customer.Cart
                 OrderDetailsCart.OrderHeader.PhoneNumber = applicationUser.PhoneNumber;
                 OrderDetailsCart.OrderHeader.DeliveryTime = DateTime.Now;
                 OrderDetailsCart.OrderHeader.DeliveryDate = DateTime.Now;
+                OrderDetailsCart.OrderHeader.TransactionsId = i.ToString();
+                i++;
             }
         }
 
@@ -63,7 +66,8 @@ namespace FoodDelivery.Pages.Customer.Cart
             OrderDetailsCart.OrderHeader.UserId = claim.Value;
             OrderDetailsCart.OrderHeader.Status = SD.StatusSubmitted;
             OrderDetailsCart.OrderHeader.DeliveryTime = Convert.ToDateTime(OrderDetailsCart.OrderHeader.DeliveryDate.ToShortDateString() + " " + OrderDetailsCart.OrderHeader.DeliveryTime.ToShortTimeString());
-
+            OrderDetailsCart.OrderHeader.TransactionsId = i.ToString();
+            i++;
             List<OrderDetails> orderDetailsList = new List<OrderDetails>();
             _unitOfWork.OrderHeader.Add(OrderDetailsCart.OrderHeader);
             _unitOfWork.Commit();
